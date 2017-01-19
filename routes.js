@@ -4,6 +4,7 @@ var express = require('express');
 var router = express.Router();
 var Question = require('./models').Question;
 
+// dry way to provide a document to routes containing its id and url
 router.param("qId", function(req, res, next, id) {
 	Question.findById(id, function(err, doc) {
 		if(err) return next(err);
@@ -18,7 +19,7 @@ router.param("qId", function(req, res, next, id) {
 });
 
 router.param("aId", function(req, res, next, id) {
-	req.answer = req.question,answers.id(id);
+	req.answer = req.question.answers.id(id);
 	if(!req.answer) {
 		err = new Error("Not found");
 		err.status = 404;
@@ -38,7 +39,7 @@ router.get("/", function(req, res, next) {
 				.sort({createdAt: -1})
 				.exec(function(err, question) {
 					if(err) return next(err);
-					res.json(questions);
+					res.json(question);
 				});
 
 });
